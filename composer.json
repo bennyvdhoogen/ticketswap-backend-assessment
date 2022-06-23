@@ -1,0 +1,22 @@
+{
+    "name": "ticketswap/backend-assessment",
+    "description": "TicketSwap assessment",
+    "type": "project",
+    "require": {
+        "phpunit/phpunit": "^9.5",
+        "moneyphp/money": "^4.0"
+    },
+    "authors": [
+        {
+            "name": "Pascal de Vink",
+            "email": "pascal@ticketswap.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "TicketSwap\\Assessment\\": "src",
+            "TicketSwap\\Assessment\\tests\\": "tests"
+        }
+    }
+}
