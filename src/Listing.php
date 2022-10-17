@@ -8,6 +8,7 @@ use TicketSwap\Assessment\Exceptions\ListingContainsDuplicateBarcodeException;
 final class Listing
 {
     private ListingId $id;
+    private bool $isVerified = false;
 
     /**
      * @param array<Ticket> $tickets
@@ -73,5 +74,15 @@ final class Listing
     public function getPrice() : Money
     {
         return $this->price;
+    }
+
+    public function isVerified() : bool
+    {
+        return $this->isVerified;
+    }
+
+    public function verify(Admin $admin)
+    {
+        $this->isVerified = true;
     }
 }

@@ -5,6 +5,7 @@ namespace TicketSwap\Assessment\tests;
 use Money\Currency;
 use Money\Money;
 use PHPUnit\Framework\TestCase;
+use TicketSwap\Assessment\Admin;
 use TicketSwap\Assessment\Barcode;
 use TicketSwap\Assessment\Buyer;
 use TicketSwap\Assessment\Exceptions\ListingContainsDuplicateBarcodeException;
@@ -100,9 +101,25 @@ class ListingTest extends TestCase
 
         $ticketsNotForSale = $listing->getTickets(false);
 
-        ray($ticketsNotForSale);
-
         $this->assertCount(1, $ticketsNotForSale);
         $this->assertSame((string) $boughtTicket->getId(), (string) $ticketsNotForSale[0]->getId());
+    }
+
+    public function it_should_be_possible_to_verify_a_listing_for_an_admin()
+    {
+        $admin = new Admin('Administrator');
+        $listing = new Listing(
+            tickets: [
+                new Ticket(
+                    [new Barcode('EAN-13', '38974312923')]
+                ),
+            ],
+            price: new Money(4950, new Currency('EUR')),
+            seller: new Seller('Pascal'),
+        );
+
+        $listing->verify($admin);
+
+        $this->assertSame(true, $listing->isVerified());
     }
 }
