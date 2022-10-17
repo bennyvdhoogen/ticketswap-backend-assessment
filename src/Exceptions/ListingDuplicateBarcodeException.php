@@ -2,7 +2,7 @@
 
 namespace TicketSwap\Assessment\Exceptions;
 
-class ListingDuplicateBarcodeException extends \Exception
+class ListingContainsDuplicateBarcodeException extends \Exception
 {
     public function __construct()
     {

@@ -3,7 +3,7 @@
 namespace TicketSwap\Assessment;
 
 use Money\Money;
-use TicketSwap\Assessment\Exceptions\ListingDuplicateBarcodeException;
+use TicketSwap\Assessment\Exceptions\ListingContainsDuplicateBarcodeException;
 
 final class Listing
 {
@@ -23,7 +23,7 @@ final class Listing
         $barcodeStrings = [];
         foreach ($this->tickets as $ticket) {
             if (in_array((string) $ticket->getBarcode(), $barcodeStrings)) {
-                throw new ListingDuplicateBarcodeException();
+                throw new ListingContainsDuplicateBarcodeException();
             }
 
             $barcodeStrings[] = (string) $ticket->getBarcode();

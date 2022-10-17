@@ -7,7 +7,7 @@ use Money\Money;
 use PHPUnit\Framework\TestCase;
 use TicketSwap\Assessment\Barcode;
 use TicketSwap\Assessment\Buyer;
-use TicketSwap\Assessment\Exceptions\ListingDuplicateBarcodeException;
+use TicketSwap\Assessment\Exceptions\ListingContainsDuplicateBarcodeException;
 use TicketSwap\Assessment\Listing;
 use TicketSwap\Assessment\ListingId;
 use TicketSwap\Assessment\Seller;
@@ -40,7 +40,7 @@ class ListingTest extends TestCase
      */
     public function it_should_not_be_possible_to_create_a_listing_with_duplicate_barcodes()
     {
-        $this->expectException(ListingDuplicateBarcodeException::class);
+        $this->expectException(ListingContainsDuplicateBarcodeException::class);
 
         $listing = new Listing(
             tickets: [
