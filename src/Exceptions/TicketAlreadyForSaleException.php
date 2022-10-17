@@ -10,11 +10,4 @@ class TicketAlreadyForSaleException extends \Exception
     {
         //
     }
-
-    public static function throw(): self
-    {
-        return new self(
-            "This listing contains a barcode that is already for sale"
-        );
-    }
 }

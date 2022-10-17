@@ -23,7 +23,7 @@ final class Listing
         $barcodeStrings = [];
         foreach ($this->tickets as $ticket) {
             if (in_array((string) $ticket->getBarcode(), $barcodeStrings)) {
-                throw new ListingContainsDuplicateBarcodeException();
+                throw new ListingContainsDuplicateBarcodeException(ListingContainsDuplicateBarcodeException::CONTAINS_DUPLICATE_BARCODES);
             }
 
             $barcodeStrings[] = (string) $ticket->getBarcode();

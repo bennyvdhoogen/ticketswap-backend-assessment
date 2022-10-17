@@ -10,11 +10,4 @@ class TicketAlreadySoldException extends \Exception
     {
         //
     }
-
-    public static function throw(): self
-    {
-        return new self(
-            "The given ticket has already been sold"
-        );
-    }
 }
