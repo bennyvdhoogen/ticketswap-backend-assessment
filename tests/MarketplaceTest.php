@@ -195,7 +195,6 @@ class MarketplaceTest extends TestCase
 
     /**
      * @test
-     * @group todo
      */
     public function it_should_be_possible_for_a_buyer_of_a_ticket_to_sell_it_again()
     {
@@ -237,7 +236,6 @@ class MarketplaceTest extends TestCase
         // try to add listing with same barcode, marked as sold
         // assert that new listing is added
         $listingsForSale = $marketplace->getListingsForSale();
-        ray($listingsForSale);
         $this->assertCount(1, $listingsForSale);
     }
 }
