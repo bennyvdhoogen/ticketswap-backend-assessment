@@ -21,7 +21,6 @@ class ListingTest extends TestCase
     public function it_should_be_possible_to_create_a_listing()
     {
         $listing = new Listing(
-            id: new ListingId('D59FDCCC-7713-45EE-A050-8A553A0F1169'),
             tickets: [
                 new Ticket(
                     new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B'),
@@ -49,7 +48,6 @@ class ListingTest extends TestCase
     public function it_should_list_the_tickets_for_sale()
     {
         $listing = new Listing(
-            id: new ListingId('D59FDCCC-7713-45EE-A050-8A553A0F1169'),
             tickets: [
                 new Ticket(
                     new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B'),
@@ -77,7 +75,6 @@ class ListingTest extends TestCase
     public function it_should_list_the_tickets_not_for_sale()
     {
         $listing = new Listing(
-            id: new ListingId('D59FDCCC-7713-45EE-A050-8A553A0F1169'),
             tickets: [
                 new Ticket(
                     new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B'),
@@ -93,7 +90,7 @@ class ListingTest extends TestCase
             seller: new Seller('Pascal'),
         );
 
-        
+
         $ticketsNotForSale = $listing->getTickets(false);
 
         $this->assertCount(1, $ticketsNotForSale);

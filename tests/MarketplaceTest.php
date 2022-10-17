@@ -25,7 +25,6 @@ class MarketplaceTest extends TestCase
         $marketplace = new Marketplace(
             listingsForSale: [
                 new Listing(
-                    id: new ListingId('D59FDCCC-7713-45EE-A050-8A553A0F1169'),
                     seller: new Seller('Pascal'),
                     tickets: [
                         new Ticket(
@@ -51,7 +50,6 @@ class MarketplaceTest extends TestCase
         $marketplace = new Marketplace(
             listingsForSale: [
                 new Listing(
-                    id: new ListingId('D59FDCCC-7713-45EE-A050-8A553A0F1169'),
                     seller: new Seller('Pascal'),
                     tickets: [
                         new Ticket(
@@ -81,7 +79,6 @@ class MarketplaceTest extends TestCase
         $marketplace = new Marketplace(
             listingsForSale: [
                 new Listing(
-                    id: new ListingId('D59FDCCC-7713-45EE-A050-8A553A0F1169'),
                     seller: new Seller('Pascal'),
                     tickets: [
                         new Ticket(

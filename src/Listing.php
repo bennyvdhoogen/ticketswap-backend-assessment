@@ -6,15 +6,17 @@ use Money\Money;
 
 final class Listing
 {
+    private ListingId $id;
+
     /**
      * @param array<Ticket> $tickets
      */
     public function __construct(
-        private ListingId $id,
         private Seller $seller,
         private array $tickets,
         private Money $price
     ) {
+        $this->id = ListingId::generateRandom();
     }
 
     public function getId() : ListingId
