@@ -30,6 +30,17 @@ class MarketplaceTest extends TestCase
                     tickets: [
                         new Ticket(
                             new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B'),
+                            new Barcode('EAN-13', '38974312923'),
+                            new Buyer('Sarah'),
+                        ),
+                    ],
+                    price: new Money(4950, new Currency('EUR')),
+                ),
+                new Listing(
+                    seller: new Seller('Pascal'),
+                    tickets: [
+                        new Ticket(
+                            new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B'),
                             new Barcode('EAN-13', '38974312923')
                         ),
                     ],
