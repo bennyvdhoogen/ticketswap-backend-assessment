@@ -3,9 +3,12 @@
 namespace TicketSwap\Assessment;
 
 use Ramsey\Uuid\Uuid;
+use TicketSwap\Assessment\Traits\Id;
 
 final class ListingId implements \Stringable
 {
+    use Id;
+
     public function __construct(private string $id)
     {
     }
@@ -13,10 +16,5 @@ final class ListingId implements \Stringable
     public function __toString() : string
     {
         return $this->id;
-    }
-
-    public static function generateRandom(): self
-    {
-        return new self(Uuid::uuid4()->toString());
     }
 }
