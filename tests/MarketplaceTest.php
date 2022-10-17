@@ -12,7 +12,7 @@ use TicketSwap\Assessment\ListingId;
 use TicketSwap\Assessment\Marketplace;
 use TicketSwap\Assessment\Seller;
 use TicketSwap\Assessment\Ticket;
-use TicketSwap\Assessment\TicketAlreadySoldException;
+use TicketSwap\Assessment\Exceptions\TicketAlreadySoldException;
 use TicketSwap\Assessment\TicketId;
 
 class MarketplaceTest extends TestCase
