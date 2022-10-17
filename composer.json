@@ -4,7 +4,8 @@
     "type": "project",
     "require": {
         "phpunit/phpunit": "^9.5",
-        "moneyphp/money": "^4.0"
+        "moneyphp/money": "^4.0",
+        "ramsey/uuid": "^4.5"
     },
     "authors": [
         {
