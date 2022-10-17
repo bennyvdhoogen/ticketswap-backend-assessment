@@ -7,6 +7,7 @@ use Money\Money;
 use PHPUnit\Framework\TestCase;
 use TicketSwap\Assessment\Barcode;
 use TicketSwap\Assessment\Buyer;
+use TicketSwap\Assessment\Exceptions\NotCurrentOwnerException;
 use TicketSwap\Assessment\Exceptions\TicketAlreadyForSaleException;
 use TicketSwap\Assessment\Exceptions\TicketAlreadySoldException;
 use TicketSwap\Assessment\Listing;
@@ -20,7 +21,6 @@ class MarketplaceTest extends TestCase
 {
     /**
      * @test
-     * @group todo
      */
     public function it_should_list_all_the_tickets_for_sale()
     {
@@ -221,7 +221,7 @@ class MarketplaceTest extends TestCase
 
         $marketplace->setListingForSale(
             new Listing(
-                seller: new Seller('Tom'),
+                seller: new Seller('Sarah'),
                 tickets: [
                     new Ticket(
                         $boughtTicket->getId(),
@@ -234,5 +234,47 @@ class MarketplaceTest extends TestCase
 
         $listingsForSale = $marketplace->getListingsForSale();
         $this->assertCount(1, $listingsForSale);
+    }
+
+    /**
+     * @test
+     */
+    public function it_should_not_be_possible_for_someone_other_than_the_last_buyer_to_sell_it_again()
+    {
+        $ticketId = new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B');
+        $marketplace = new Marketplace(
+            listings: [
+                new Listing(
+                    seller: new Seller('Pascal'),
+                    tickets: [
+                        new Ticket(
+                            $ticketId,
+                            new Barcode('EAN-13', '38974312923')
+                        ),
+                    ],
+                    price: new Money(4950, new Currency('EUR')),
+                ),
+            ]
+        );
+
+        $boughtTicket = $marketplace->buyTicket(
+            buyer: new Buyer('Sarah'),
+            ticketId: $ticketId
+        );
+
+        $this->expectException(NotCurrentOwnerException::class);
+
+        $marketplace->setListingForSale(
+            new Listing(
+                seller: new Seller('Pascal'),
+                tickets: [
+                    new Ticket(
+                        $boughtTicket->getId(),
+                        new Barcode('EAN-13', '38974312923')
+                    ),
+                ],
+                price: new Money(5950, new Currency('EUR')),
+            )
+        );
     }
 }

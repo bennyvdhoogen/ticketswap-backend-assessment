@@ -2,6 +2,7 @@
 
 namespace TicketSwap\Assessment;
 
+use TicketSwap\Assessment\Exceptions\NotCurrentOwnerException;
 use TicketSwap\Assessment\Exceptions\TicketAlreadyForSaleException;
 use TicketSwap\Assessment\Exceptions\TicketAlreadySoldException;
 
@@ -74,8 +75,37 @@ final class Marketplace
             if ($this->containsActiveListingWithBarcode($ticket->getBarcode())) {
                 throw new TicketAlreadyForSaleException(TicketAlreadyForSaleException::ALREADY_FOR_SALE);
             }
+
+            $ticketsWithSameBarcode = $this->getTicketsByBarcode($ticket->getBarcode());
+            if (!empty($ticketsWithSameBarcode)) {
+                if ((string) $ticketsWithSameBarcode[0]->getBuyer() !== (string) $listing->getSeller()) {
+                    throw new NotCurrentOwnerException(NotCurrentOwnerException::NOT_CURRENT_OWNER);
+                }
+            }
         }
 
         $this->listings[] = $listing;
+    }
+
+    public function getTicketsByBarcode(Barcode $barcode) : array
+    {
+        $tickets = [];
+
+        foreach ($this->listings as $listing) {
+            foreach ($listing->getTickets() as $ticket) {
+                ray($ticket->getBarcode());
+                ray($barcode);
+                if ((string) $ticket->getBarcode() === (string) $barcode) {
+                    $tickets[] = $ticket;
+                }
+            }
+        }
+
+        // Sort the tickets by the bought_at date, descending
+        usort($tickets, function($first,$second) {
+            return $first->bought_at < $second->bought_at;
+        });
+
+        return $tickets;
     }
 }
