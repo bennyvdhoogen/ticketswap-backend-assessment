@@ -2,11 +2,12 @@
 
 namespace TicketSwap\Assessment\tests;
 
-use PHPUnit\Framework\TestCase;
 use Money\Currency;
 use Money\Money;
+use PHPUnit\Framework\TestCase;
 use TicketSwap\Assessment\Barcode;
 use TicketSwap\Assessment\Buyer;
+use TicketSwap\Assessment\Exceptions\ListingDuplicateBarcodeException;
 use TicketSwap\Assessment\Listing;
 use TicketSwap\Assessment\ListingId;
 use TicketSwap\Assessment\Seller;
@@ -39,7 +40,24 @@ class ListingTest extends TestCase
      */
     public function it_should_not_be_possible_to_create_a_listing_with_duplicate_barcodes()
     {
-        $this->markTestSkipped('Needs to be implemented');
+        $this->expectException(ListingDuplicateBarcodeException::class);
+
+        $listing = new Listing(
+            tickets: [
+                new Ticket(
+                    new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B'),
+                    new Barcode('EAN-13', '38974312923')
+                ),
+                new Ticket(
+                    new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401C'),
+                    new Barcode('EAN-13', '38974312923')
+                ),
+            ],
+            price: new Money(4950, new Currency('EUR')),
+            seller: new Seller('Pascal'),
+        );
+
+        $this->assertCount(0, $listing->getTickets());
     }
 
     /**
