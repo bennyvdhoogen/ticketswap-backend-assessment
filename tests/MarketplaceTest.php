@@ -213,12 +213,11 @@ class MarketplaceTest extends TestCase
                 ),
             ]
         );
+
         $boughtTicket = $marketplace->buyTicket(
             buyer: new Buyer('Sarah'),
             ticketId: $ticketId
         );
-
-        ray($boughtTicket);
 
         $marketplace->setListingForSale(
             new Listing(
@@ -233,8 +232,6 @@ class MarketplaceTest extends TestCase
             )
         );
 
-        // try to add listing with same barcode, marked as sold
-        // assert that new listing is added
         $listingsForSale = $marketplace->getListingsForSale();
         $this->assertCount(1, $listingsForSale);
     }
