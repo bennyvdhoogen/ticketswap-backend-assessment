@@ -17,7 +17,6 @@ final class ListingId implements \Stringable
 
     public static function generateRandom(): self
     {
-        $uuid = Uuid::uuid4();
-        return new self($uuid);
+        return new self(Uuid::uuid4()->toString());
     }
 }
