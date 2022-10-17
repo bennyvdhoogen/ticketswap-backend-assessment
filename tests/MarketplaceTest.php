@@ -20,11 +20,12 @@ class MarketplaceTest extends TestCase
 {
     /**
      * @test
+     * @group todo
      */
     public function it_should_list_all_the_tickets_for_sale()
     {
         $marketplace = new Marketplace(
-            listingsForSale: [
+            listings: [
                 new Listing(
                     seller: new Seller('Pascal'),
                     tickets: [
@@ -194,13 +195,49 @@ class MarketplaceTest extends TestCase
 
     /**
      * @test
+     * @group todo
      */
     public function it_should_be_possible_for_a_buyer_of_a_ticket_to_sell_it_again()
     {
-        // create marketplace containing sold ticket with given barcode
+        $ticketId = new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B');
+        $marketplace = new Marketplace(
+            listings: [
+                new Listing(
+                    seller: new Seller('Pascal'),
+                    tickets: [
+                        new Ticket(
+                            $ticketId,
+                            new Barcode('EAN-13', '38974312923')
+                        ),
+                    ],
+                    price: new Money(4950, new Currency('EUR')),
+                ),
+            ]
+        );
+        $boughtTicket = $marketplace->buyTicket(
+            buyer: new Buyer('Sarah'),
+            ticketId: $ticketId
+        );
+
+        ray($boughtTicket);
+
+        $marketplace->setListingForSale(
+            new Listing(
+                seller: new Seller('Tom'),
+                tickets: [
+                    new Ticket(
+                        $boughtTicket->getId(),
+                        new Barcode('EAN-13', '38974312923')
+                    ),
+                ],
+                price: new Money(5950, new Currency('EUR')),
+            )
+        );
+
         // try to add listing with same barcode, marked as sold
         // assert that new listing is added
-
-        $this->markTestSkipped('Needs to be implemented');
+        $listingsForSale = $marketplace->getListingsForSale();
+        ray($listingsForSale);
+        $this->assertCount(1, $listingsForSale);
     }
 }

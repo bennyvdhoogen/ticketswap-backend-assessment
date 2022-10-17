@@ -8,9 +8,9 @@ use TicketSwap\Assessment\Exceptions\TicketAlreadySoldException;
 final class Marketplace
 {
     /**
-     * @param array<Listing> $listingsForSale
+     * @param array<Listing> $listings
      */
-    public function __construct(private array $listingsForSale = [])
+    public function __construct(private array $listings = [])
     {
     }
 
@@ -19,12 +19,27 @@ final class Marketplace
      */
     public function getListingsForSale() : array
     {
-        return $this->listingsForSale;
+        $listingsForSale = [];
+        foreach ($this->listings as $listing) {
+            $soldTicketsInListing = 0;
+
+            foreach ($listing->getTickets() as $ticket) {
+                if ($ticket->isBought()) {
+                    $soldTicketsInListing++;
+                }
+            }
+
+            if (count($listing->getTickets()) != $soldTicketsInListing) {
+                $listingsForSale[] = $listing;
+            }
+        }
+
+        return $listingsForSale;
     }
 
     public function containsActiveListingWithBarcode(Barcode $barcode) : bool
     {
-        foreach ($this->listingsForSale as $listing) {
+        foreach ($this->listings as $listing) {
             foreach ($listing->getTickets() as $ticket) {
                 if ((string) $ticket->getBarcode() === (string) $barcode) {
                     if (!$ticket->isBought()) {
@@ -39,7 +54,7 @@ final class Marketplace
 
     public function buyTicket(Buyer $buyer, TicketId $ticketId) : Ticket
     {
-        foreach($this->listingsForSale as $listing) {
+        foreach($this->listings as $listing) {
             foreach($listing->getTickets() as $ticket) {
                 if ($ticket->getId()->equals($ticketId)) {
 
@@ -61,6 +76,6 @@ final class Marketplace
             }
         }
 
-        $this->listingsForSale[] = $listing;
+        $this->listings[] = $listing;
     }
 }
