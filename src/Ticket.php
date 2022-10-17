@@ -9,8 +9,9 @@ final class Ticket
     /**
      * @param array<Barcode> $barcode
      */
-    public function __construct(private TicketId $id, private array $barcodes, private ?Buyer $buyer = null)
+    public function __construct(private array $barcodes, private ?Buyer $buyer = null)
     {
+        $this->id = TicketId::generateRandom();
     }
 
     public function getId() : TicketId

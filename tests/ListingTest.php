@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use TicketSwap\Assessment\Barcode;
 use TicketSwap\Assessment\Buyer;
 use TicketSwap\Assessment\Exceptions\ListingContainsDuplicateBarcodeException;
+use TicketSwap\Assessment\Factories\TicketFactory;
 use TicketSwap\Assessment\Listing;
 use TicketSwap\Assessment\ListingId;
 use TicketSwap\Assessment\Seller;
@@ -24,7 +25,6 @@ class ListingTest extends TestCase
         $listing = new Listing(
             tickets: [
                 new Ticket(
-                    new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B'),
                     [new Barcode('EAN-13', '38974312923')]
                 ),
             ],
@@ -45,11 +45,9 @@ class ListingTest extends TestCase
         $listing = new Listing(
             tickets: [
                 new Ticket(
-                    new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B'),
                     [new Barcode('EAN-13', '38974312923')]
                 ),
                 new Ticket(
-                    new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401C'),
                     [new Barcode('EAN-13', '38974312923')]
                 ),
             ],
@@ -65,17 +63,13 @@ class ListingTest extends TestCase
      */
     public function it_should_list_the_tickets_for_sale()
     {
+        $boughtTicketWithBarcode = TicketFactory::boughtTicketWithBarcode('28774312924', 'Sarah');
+        $availableTicket = TicketFactory::availableTicketWithBarcode('38957953498');
+
         $listing = new Listing(
             tickets: [
-                new Ticket(
-                    new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B'),
-                    [new Barcode('EAN-13', '38974312923')],
-                    new Buyer('Jane')
-                ),
-                new Ticket(
-                    new TicketId('B47CBE2D-9F80-47D9-A9CC-894CE82AA6BA'),
-                    [new Barcode('EAN-13', '38957953498')]
-                ),
+                $boughtTicketWithBarcode,
+                $availableTicket
             ],
             price: new Money(4950, new Currency('EUR')),
             seller: new Seller('Pascal'),
@@ -84,25 +78,20 @@ class ListingTest extends TestCase
         $ticketsForSale = $listing->getTickets(true);
 
         $this->assertCount(1, $ticketsForSale);
-        $this->assertSame('B47CBE2D-9F80-47D9-A9CC-894CE82AA6BA', (string) $ticketsForSale[0]->getId());
+        $this->assertSame((string) $availableTicket->getId(), (string) $ticketsForSale[0]->getId());
     }
 
-        /**
+    /**
      * @test
      */
     public function it_should_list_the_tickets_not_for_sale()
     {
+        $availableTicket = TicketFactory::availableTicketWithBarcode('38957953498');
+        $boughtTicket = TicketFactory::boughtTicketWithBarcode('28957953497', 'Sarah');
         $listing = new Listing(
             tickets: [
-                new Ticket(
-                    new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B'),
-                    [new Barcode('EAN-13', '38974312923')],
-                    new Buyer('Jane')
-                ),
-                new Ticket(
-                    new TicketId('B47CBE2D-9F80-47D9-A9CC-894CE82AA6BA'),
-                    [new Barcode('EAN-13', '38957953498')]
-                ),
+                $availableTicket,
+                $boughtTicket
             ],
             price: new Money(4950, new Currency('EUR')),
             seller: new Seller('Pascal'),
@@ -111,7 +100,9 @@ class ListingTest extends TestCase
 
         $ticketsNotForSale = $listing->getTickets(false);
 
+        ray($ticketsNotForSale);
+
         $this->assertCount(1, $ticketsNotForSale);
-        $this->assertSame('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B', (string) $ticketsNotForSale[0]->getId());
+        $this->assertSame((string) $boughtTicket->getId(), (string) $ticketsNotForSale[0]->getId());
     }
 }

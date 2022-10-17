@@ -10,6 +10,7 @@ use TicketSwap\Assessment\Buyer;
 use TicketSwap\Assessment\Exceptions\NotCurrentOwnerException;
 use TicketSwap\Assessment\Exceptions\TicketAlreadyForSaleException;
 use TicketSwap\Assessment\Exceptions\TicketAlreadySoldException;
+use TicketSwap\Assessment\Factories\TicketFactory;
 use TicketSwap\Assessment\Listing;
 use TicketSwap\Assessment\ListingId;
 use TicketSwap\Assessment\Marketplace;
@@ -24,26 +25,22 @@ class MarketplaceTest extends TestCase
      */
     public function it_should_list_all_the_tickets_for_sale()
     {
+        $boughtTicketWithBarcode = TicketFactory::boughtTicketWithBarcode('883749835', 'Sarah');
+        $availableTicket = TicketFactory::availableTicketWithBarcode('893759834');
+
         $marketplace = new Marketplace(
             listings: [
                 new Listing(
                     seller: new Seller('Pascal'),
                     tickets: [
-                        new Ticket(
-                            new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B'),
-                            [new Barcode('EAN-13', '38974312923')],
-                            new Buyer('Sarah'),
-                        ),
+                        $boughtTicketWithBarcode
                     ],
                     price: new Money(4950, new Currency('EUR')),
                 ),
                 new Listing(
                     seller: new Seller('Pascal'),
                     tickets: [
-                        new Ticket(
-                            new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B'),
-                            [new Barcode('EAN-13', '38974312923')]
-                        ),
+                        $availableTicket
                     ],
                     price: new Money(4950, new Currency('EUR')),
                 ),
@@ -60,15 +57,14 @@ class MarketplaceTest extends TestCase
      */
     public function it_should_be_possible_to_buy_a_ticket()
     {
+        $availableTicket = TicketFactory::availableTicketWithBarcode('893759834');
+
         $marketplace = new Marketplace(
             listings: [
                 new Listing(
                     seller: new Seller('Pascal'),
                     tickets: [
-                        new Ticket(
-                            new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B'),
-                            [new Barcode('EAN-13', '38974312923')]
-                        ),
+                        $availableTicket
                     ],
                     price: new Money(4950, new Currency('EUR')),
                 ),
@@ -77,11 +73,11 @@ class MarketplaceTest extends TestCase
 
         $boughtTicket = $marketplace->buyTicket(
             buyer: new Buyer('Sarah'),
-            ticketId: new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B')
+            ticketId: $availableTicket->getId()
         );
 
         $this->assertNotNull($boughtTicket);
-        $this->assertSame('EAN-13:38974312923', (string) $boughtTicket->getBarcodes()[0]);
+        $this->assertSame('EAN-13:893759834', (string) $boughtTicket->getBarcodes()[0]);
     }
 
     /**
@@ -89,15 +85,13 @@ class MarketplaceTest extends TestCase
      */
     public function it_should_not_be_possible_to_buy_the_same_ticket_twice()
     {
+        $availableTicket = TicketFactory::availableTicketWithBarcode('38974312923');
         $marketplace = new Marketplace(
             listings: [
                 new Listing(
                     seller: new Seller('Pascal'),
                     tickets: [
-                        new Ticket(
-                            new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B'),
-                            [new Barcode('EAN-13', '38974312923')]
-                        ),
+                        $availableTicket
                     ],
                     price: new Money(4950, new Currency('EUR')),
                 ),
@@ -108,12 +102,12 @@ class MarketplaceTest extends TestCase
 
         $marketplace->buyTicket(
             buyer: new Buyer('Sarah'),
-            ticketId: new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B')
+            ticketId: $availableTicket->getId()
         );
 
         $marketplace->buyTicket(
             buyer: new Buyer('William'),
-            ticketId: new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B')
+            ticketId: $availableTicket->getId()
         );
     }
 
@@ -128,7 +122,6 @@ class MarketplaceTest extends TestCase
                     seller: new Seller('Pascal'),
                     tickets: [
                         new Ticket(
-                            new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B'),
                             [new Barcode('EAN-13', '38974312923')]
                         ),
                     ],
@@ -142,8 +135,7 @@ class MarketplaceTest extends TestCase
                 seller: new Seller('Tom'),
                 tickets: [
                     new Ticket(
-                        new TicketId('45B96761-E533-4925-859F-3CA62182848E'),
-                        [new Barcode('EAN-13', '893759834')]
+                        [new Barcode('EAN-13', '18974412925')]
                     ),
                 ],
                 price: new Money(4950, new Currency('EUR')),
@@ -166,7 +158,6 @@ class MarketplaceTest extends TestCase
                     seller: new Seller('Pascal'),
                     tickets: [
                         new Ticket(
-                            new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B'),
                             [new Barcode('EAN-13', '38974312923')]
                         ),
                     ],
@@ -181,7 +172,6 @@ class MarketplaceTest extends TestCase
                 seller: new Seller('Tom'),
                 tickets: [
                     new Ticket(
-                        new TicketId('45B96761-E533-4925-859F-3CA62182848E'),
                         [new Barcode('EAN-13', '38974312923')]
                     ),
                 ],
@@ -198,25 +188,22 @@ class MarketplaceTest extends TestCase
      */
     public function it_should_be_possible_for_a_buyer_of_a_ticket_to_sell_it_again()
     {
-        $ticketId = new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B');
+        $availableTicket = TicketFactory::availableTicketWithBarcode('38974312923');
         $marketplace = new Marketplace(
             listings: [
                 new Listing(
                     seller: new Seller('Pascal'),
                     tickets: [
-                        new Ticket(
-                            $ticketId,
-                            [new Barcode('EAN-13', '38974312923')]
-                        ),
+                        $availableTicket
                     ],
                     price: new Money(4950, new Currency('EUR')),
                 ),
             ]
         );
 
-        $boughtTicket = $marketplace->buyTicket(
+        $marketplace->buyTicket(
             buyer: new Buyer('Sarah'),
-            ticketId: $ticketId
+            ticketId: $availableTicket->getId()
         );
 
         $marketplace->setListingForSale(
@@ -224,7 +211,6 @@ class MarketplaceTest extends TestCase
                 seller: new Seller('Sarah'),
                 tickets: [
                     new Ticket(
-                        $boughtTicket->getId(),
                         [new Barcode('EAN-13', '38974312923')]
                     ),
                 ],
@@ -241,25 +227,22 @@ class MarketplaceTest extends TestCase
      */
     public function it_should_not_be_possible_for_someone_other_than_the_last_buyer_to_sell_it_again()
     {
-        $ticketId = new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B');
+        $availableTicket = TicketFactory::availableTicketWithBarcode('38974312923');
         $marketplace = new Marketplace(
             listings: [
                 new Listing(
                     seller: new Seller('Pascal'),
                     tickets: [
-                        new Ticket(
-                            $ticketId,
-                            [new Barcode('EAN-13', '38974312923')]
-                        ),
+                        $availableTicket
                     ],
                     price: new Money(4950, new Currency('EUR')),
                 ),
             ]
         );
 
-        $boughtTicket = $marketplace->buyTicket(
+        $boughtTicketWithBarcode = $marketplace->buyTicket(
             buyer: new Buyer('Sarah'),
-            ticketId: $ticketId
+            ticketId: $availableTicket->getId()
         );
 
         $this->expectException(NotCurrentOwnerException::class);
@@ -269,7 +252,6 @@ class MarketplaceTest extends TestCase
                 seller: new Seller('Pascal'),
                 tickets: [
                     new Ticket(
-                        $boughtTicket->getId(),
                         [new Barcode('EAN-13', '38974312923')]
                     ),
                 ],
@@ -283,16 +265,13 @@ class MarketplaceTest extends TestCase
      */
     public function it_should_be_possible_to_sell_tickets_back_and_forth()
     {
-        $ticketId = new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B');
+        $availableTicket = TicketFactory::availableTicketWithBarcode('38974312923');
         $marketplace = new Marketplace(
             listings: [
                 new Listing(
                     seller: new Seller('Pascal'),
                     tickets: [
-                        new Ticket(
-                            $ticketId,
-                            [new Barcode('EAN-13', '38974312923')]
-                        ),
+                        $availableTicket
                     ],
                     price: new Money(4950, new Currency('EUR')),
                 ),
@@ -301,17 +280,17 @@ class MarketplaceTest extends TestCase
 
         $boughtTicket = $marketplace->buyTicket(
             buyer: new Buyer('Sarah'),
-            ticketId: $ticketId
+            ticketId: $availableTicket->getId()
         );
 
+        $readdedTicket = new Ticket(
+            [new Barcode('EAN-13', '38974312923')]
+        );
         $marketplace->setListingForSale(
             new Listing(
                 seller: new Seller('Sarah'),
                 tickets: [
-                    new Ticket(
-                        $boughtTicket->getId(),
-                        [new Barcode('EAN-13', '38974312923')]
-                    ),
+                    $readdedTicket
                 ],
                 price: new Money(5950, new Currency('EUR')),
             )
@@ -319,7 +298,9 @@ class MarketplaceTest extends TestCase
 
         $otherBoughtTicket = $marketplace->buyTicket(
             buyer: new Buyer('Pascal'),
-            ticketId: $ticketId
+            ticketId: $readdedTicket->getId()
         );
+
+        $this->assertSame('Pascal', (string) $otherBoughtTicket->getBuyer());
     }
 }

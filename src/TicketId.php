@@ -2,8 +2,12 @@
 
 namespace TicketSwap\Assessment;
 
+use TicketSwap\Assessment\Traits\Id;
+
 final class TicketId implements \Stringable
 {
+    use Id;
+
     public function __construct(private string $id)
     {
     }
