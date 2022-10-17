@@ -277,4 +277,49 @@ class MarketplaceTest extends TestCase
             )
         );
     }
+
+    /**
+     * @test
+     */
+    public function it_should_be_possible_to_sell_tickets_back_and_forth()
+    {
+        $ticketId = new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B');
+        $marketplace = new Marketplace(
+            listings: [
+                new Listing(
+                    seller: new Seller('Pascal'),
+                    tickets: [
+                        new Ticket(
+                            $ticketId,
+                            new Barcode('EAN-13', '38974312923')
+                        ),
+                    ],
+                    price: new Money(4950, new Currency('EUR')),
+                ),
+            ]
+        );
+
+        $boughtTicket = $marketplace->buyTicket(
+            buyer: new Buyer('Sarah'),
+            ticketId: $ticketId
+        );
+
+        $marketplace->setListingForSale(
+            new Listing(
+                seller: new Seller('Sarah'),
+                tickets: [
+                    new Ticket(
+                        $boughtTicket->getId(),
+                        new Barcode('EAN-13', '38974312923')
+                    ),
+                ],
+                price: new Money(5950, new Currency('EUR')),
+            )
+        );
+
+        $otherBoughtTicket = $marketplace->buyTicket(
+            buyer: new Buyer('Pascal'),
+            ticketId: $ticketId
+        );
+    }
 }
