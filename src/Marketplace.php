@@ -2,6 +2,8 @@
 
 namespace TicketSwap\Assessment;
 
+use TicketSwap\Assessment\Exceptions\TicketAlreadySoldException;
+
 final class Marketplace
 {
     /**
@@ -24,7 +26,12 @@ final class Marketplace
         foreach($this->listingsForSale as $listing) {
             foreach($listing->getTickets() as $ticket) {
                 if ($ticket->getId()->equals($ticketId)) {
-                   return $ticket->buyTicket($buyer); 
+
+                    if ($ticket->isBought()) {
+                        throw new TicketAlreadySoldException("The given ticket has already been sold");
+                    }
+
+                   return $ticket->buyTicket($buyer);
                 }
             }
         }
