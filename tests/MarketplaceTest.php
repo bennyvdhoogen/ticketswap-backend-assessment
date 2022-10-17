@@ -61,7 +61,7 @@ class MarketplaceTest extends TestCase
     public function it_should_be_possible_to_buy_a_ticket()
     {
         $marketplace = new Marketplace(
-            listingsForSale: [
+            listings: [
                 new Listing(
                     seller: new Seller('Pascal'),
                     tickets: [
@@ -90,7 +90,7 @@ class MarketplaceTest extends TestCase
     public function it_should_not_be_possible_to_buy_the_same_ticket_twice()
     {
         $marketplace = new Marketplace(
-            listingsForSale: [
+            listings: [
                 new Listing(
                     seller: new Seller('Pascal'),
                     tickets: [
@@ -123,7 +123,7 @@ class MarketplaceTest extends TestCase
     public function it_should_be_possible_to_put_a_listing_for_sale()
     {
         $marketplace = new Marketplace(
-            listingsForSale: [
+            listings: [
                 new Listing(
                     seller: new Seller('Pascal'),
                     tickets: [
@@ -161,7 +161,7 @@ class MarketplaceTest extends TestCase
     public function it_should_not_be_possible_to_sell_a_ticket_with_a_barcode_that_is_already_for_sale()
     {
         $marketplace = new Marketplace(
-            listingsForSale: [
+            listings: [
                 new Listing(
                     seller: new Seller('Pascal'),
                     tickets: [
