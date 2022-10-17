@@ -3,6 +3,7 @@
 namespace TicketSwap\Assessment;
 
 use Money\Money;
+use TicketSwap\Assessment\Exceptions\ListingDuplicateBarcodeException;
 
 final class Listing
 {
@@ -17,6 +18,16 @@ final class Listing
         private Money $price
     ) {
         $this->id = ListingId::generateRandom();
+
+        // Check for barcode collision
+        $barcodeStrings = [];
+        foreach ($this->tickets as $ticket) {
+            if (in_array((string) $ticket->getBarcode(), $barcodeStrings)) {
+                throw new ListingDuplicateBarcodeException();
+            }
+
+            $barcodeStrings[] = (string) $ticket->getBarcode();
+        }
     }
 
     public function getId() : ListingId
