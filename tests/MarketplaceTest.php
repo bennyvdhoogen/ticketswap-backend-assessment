@@ -115,7 +115,6 @@ class MarketplaceTest extends TestCase
         $marketplace = new Marketplace(
             listingsForSale: [
                 new Listing(
-                    id: new ListingId('D59FDCCC-7713-45EE-A050-8A553A0F1169'),
                     seller: new Seller('Pascal'),
                     tickets: [
                         new Ticket(
@@ -130,7 +129,6 @@ class MarketplaceTest extends TestCase
 
         $marketplace->setListingForSale(
             new Listing(
-                id: new ListingId('26A7E5C4-3F59-4B3C-B5EB-6F2718BC31AD'),
                 seller: new Seller('Tom'),
                 tickets: [
                     new Ticket(

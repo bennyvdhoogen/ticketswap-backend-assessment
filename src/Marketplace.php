@@ -37,8 +37,9 @@ final class Marketplace
         }
     }
 
+    // TODO: add validation/business rules for adding listings
     public function setListingForSale(Listing $listing) : void
     {
-
+        $this->listingsForSale[] = $listing;
     }
 }
