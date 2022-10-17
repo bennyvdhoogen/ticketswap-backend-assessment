@@ -19,7 +19,7 @@ final class Listing
     ) {
         $this->id = ListingId::generateRandom();
 
-        // Check for barcode collision
+        // Check for barcode collision inside listing
         $barcodeStrings = [];
         foreach ($this->tickets as $ticket) {
             if (in_array((string) $ticket->getBarcode(), $barcodeStrings)) {
