@@ -100,6 +100,11 @@ class MarketplaceTest extends TestCase
             buyer: new Buyer('Sarah'),
             ticketId: new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B')
         );
+
+        $marketplace->buyTicket(
+            buyer: new Buyer('William'),
+            ticketId: new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B')
+        );
     }
 
     /**
