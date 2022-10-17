@@ -22,11 +22,13 @@ final class Listing
         // Check for barcode collision inside listing
         $barcodeStrings = [];
         foreach ($this->tickets as $ticket) {
-            if (in_array((string) $ticket->getBarcode(), $barcodeStrings)) {
-                throw new ListingContainsDuplicateBarcodeException(ListingContainsDuplicateBarcodeException::CONTAINS_DUPLICATE_BARCODES);
-            }
+            foreach ($ticket->getBarcodes() as $barcode) {
+                if (in_array((string) $barcode, $barcodeStrings)) {
+                    throw new ListingContainsDuplicateBarcodeException(ListingContainsDuplicateBarcodeException::CONTAINS_DUPLICATE_BARCODES);
+                }
 
-            $barcodeStrings[] = (string) $ticket->getBarcode();
+                $barcodeStrings[] = (string) $barcode;
+            }
         }
     }
 

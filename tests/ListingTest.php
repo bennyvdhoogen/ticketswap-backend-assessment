@@ -25,7 +25,7 @@ class ListingTest extends TestCase
             tickets: [
                 new Ticket(
                     new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B'),
-                    new Barcode('EAN-13', '38974312923')
+                    [new Barcode('EAN-13', '38974312923')]
                 ),
             ],
             price: new Money(4950, new Currency('EUR')),
@@ -46,11 +46,11 @@ class ListingTest extends TestCase
             tickets: [
                 new Ticket(
                     new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B'),
-                    new Barcode('EAN-13', '38974312923')
+                    [new Barcode('EAN-13', '38974312923')]
                 ),
                 new Ticket(
                     new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401C'),
-                    new Barcode('EAN-13', '38974312923')
+                    [new Barcode('EAN-13', '38974312923')]
                 ),
             ],
             price: new Money(4950, new Currency('EUR')),
@@ -69,12 +69,12 @@ class ListingTest extends TestCase
             tickets: [
                 new Ticket(
                     new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B'),
-                    new Barcode('EAN-13', '38974312923'),
+                    [new Barcode('EAN-13', '38974312923')],
                     new Buyer('Jane')
                 ),
                 new Ticket(
                     new TicketId('B47CBE2D-9F80-47D9-A9CC-894CE82AA6BA'),
-                    new Barcode('EAN-13', '38957953498')
+                    [new Barcode('EAN-13', '38957953498')]
                 ),
             ],
             price: new Money(4950, new Currency('EUR')),
@@ -96,12 +96,12 @@ class ListingTest extends TestCase
             tickets: [
                 new Ticket(
                     new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B'),
-                    new Barcode('EAN-13', '38974312923'),
+                    [new Barcode('EAN-13', '38974312923')],
                     new Buyer('Jane')
                 ),
                 new Ticket(
                     new TicketId('B47CBE2D-9F80-47D9-A9CC-894CE82AA6BA'),
-                    new Barcode('EAN-13', '38957953498')
+                    [new Barcode('EAN-13', '38957953498')]
                 ),
             ],
             price: new Money(4950, new Currency('EUR')),

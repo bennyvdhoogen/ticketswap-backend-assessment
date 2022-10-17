@@ -6,7 +6,10 @@ final class Ticket
 {
     private ?string $bought_at = null;
 
-    public function __construct(private TicketId $id, private Barcode $barcode, private ?Buyer $buyer = null)
+    /**
+     * @param array<Barcode> $barcode
+     */
+    public function __construct(private TicketId $id, private array $barcodes, private ?Buyer $buyer = null)
     {
     }
 
@@ -15,9 +18,9 @@ final class Ticket
         return $this->id;
     }
 
-    public function getBarcode() : Barcode
+    public function getBarcodes() : array
     {
-        return $this->barcode;
+        return $this->barcodes;
     }
 
     public function getBuyer() : Buyer
