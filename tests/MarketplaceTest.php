@@ -2,17 +2,18 @@
 
 namespace TicketSwap\Assessment\tests;
 
-use PHPUnit\Framework\TestCase;
 use Money\Currency;
 use Money\Money;
+use PHPUnit\Framework\TestCase;
 use TicketSwap\Assessment\Barcode;
 use TicketSwap\Assessment\Buyer;
+use TicketSwap\Assessment\Exceptions\TicketAlreadyForSaleException;
+use TicketSwap\Assessment\Exceptions\TicketAlreadySoldException;
 use TicketSwap\Assessment\Listing;
 use TicketSwap\Assessment\ListingId;
 use TicketSwap\Assessment\Marketplace;
 use TicketSwap\Assessment\Seller;
 use TicketSwap\Assessment\Ticket;
-use TicketSwap\Assessment\Exceptions\TicketAlreadySoldException;
 use TicketSwap\Assessment\TicketId;
 
 class MarketplaceTest extends TestCase
@@ -147,7 +148,37 @@ class MarketplaceTest extends TestCase
      */
     public function it_should_not_be_possible_to_sell_a_ticket_with_a_barcode_that_is_already_for_sale()
     {
-        $this->markTestSkipped('Needs to be implemented');
+        $marketplace = new Marketplace(
+            listingsForSale: [
+                new Listing(
+                    seller: new Seller('Pascal'),
+                    tickets: [
+                        new Ticket(
+                            new TicketId('6293BB44-2F5F-4E2A-ACA8-8CDF01AF401B'),
+                            new Barcode('EAN-13', '38974312923')
+                        ),
+                    ],
+                    price: new Money(4950, new Currency('EUR')),
+                ),
+            ]
+        );
+
+        $this->expectException(TicketAlreadyForSaleException::class);
+        $marketplace->setListingForSale(
+            new Listing(
+                seller: new Seller('Tom'),
+                tickets: [
+                    new Ticket(
+                        new TicketId('45B96761-E533-4925-859F-3CA62182848E'),
+                        new Barcode('EAN-13', '38974312923')
+                    ),
+                ],
+                price: new Money(5950, new Currency('EUR')),
+            )
+        );
+
+        $listingsForSale = $marketplace->getListingsForSale();
+        $this->assertCount(1, $listingsForSale);
     }
 
     /**
@@ -155,6 +186,10 @@ class MarketplaceTest extends TestCase
      */
     public function it_should_be_possible_for_a_buyer_of_a_ticket_to_sell_it_again()
     {
+        // create marketplace containing sold ticket with given barcode
+        // try to add listing with same barcode, marked as sold
+        // assert that new listing is added
+
         $this->markTestSkipped('Needs to be implemented');
     }
 }
