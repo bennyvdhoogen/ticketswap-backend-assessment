@@ -28,12 +28,15 @@ class ListingTest extends TestCase
                 new Ticket(
                     [new Barcode('EAN-13', '38974312923')]
                 ),
+                new Ticket(
+                    [new Barcode('EAN-13', '48974312924')]
+                ),
             ],
             price: new Money(4950, new Currency('EUR')),
             seller: new Seller('Pascal'),
         );
 
-        $this->assertCount(1, $listing->getTickets());
+        $this->assertCount(2, $listing->getTickets());
     }
 
     /**
