@@ -67,12 +67,12 @@ class ListingTest extends TestCase
      */
     public function it_should_list_the_tickets_for_sale()
     {
-        $boughtTicketWithBarcode = TicketFactory::soldTicketWithBarcode('28774312924', 'Sarah');
+        $soldTicketWithBarcode = TicketFactory::soldTicketWithBarcode('28774312924', 'Sarah');
         $availableTicket = TicketFactory::unsoldTicketWithBarcode('38957953498');
 
         $listing = new Listing(
             tickets: [
-                $boughtTicketWithBarcode,
+                $soldTicketWithBarcode,
                 $availableTicket
             ],
             price: new Money(4950, new Currency('EUR')),
