@@ -64,6 +64,46 @@ class MarketplaceTest extends TestCase
     /**
      * @test
      */
+    public function it_should_not_show_listings_where_all_tickets_are_sold()
+    {
+        $soldTicketWithBarcode = TicketFactory::soldTicketWithBarcode('883749835', 'Sarah');
+        $soldTicketWithBarcode2 = TicketFactory::soldTicketWithBarcode('783749833', 'Tom');
+        $availableTicket = TicketFactory::unsoldTicketWithBarcode('893759834');
+
+        $marketplace = new Marketplace(
+            listings: [
+                new Listing(
+                    seller: new Seller('Francis'),
+                    tickets: [
+                        $soldTicketWithBarcode
+                    ],
+                    price: new Money(4950, new Currency('EUR')),
+                ),
+                new Listing(
+                    seller: new Seller('Pascal'),
+                    tickets: [
+                        $soldTicketWithBarcode2
+                    ],
+                    price: new Money(4950, new Currency('EUR')),
+                ),
+            ]
+        );
+
+        // Simulate that these listings are verified by an admin
+        $admin = new Admin('Administrator');
+        $unverifiedListings = $marketplace->getUnverifiedListings();
+        foreach ($unverifiedListings as $listing) {
+            $listing->verify($admin);
+        }
+
+        $listingsForSale = $marketplace->getListingsForSale();
+
+        $this->assertCount(0, $listingsForSale);
+    }
+
+    /**
+     * @test
+     */
     public function it_should_not_list_unverified_tickets_for_sale()
     {
         $soldTicketWithBarcode = TicketFactory::soldTicketWithBarcode('883749835', 'Sarah');
