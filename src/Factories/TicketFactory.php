@@ -12,14 +12,14 @@ use TicketSwap\Assessment\Ticket;
  */
 class TicketFactory
 {
-    public static function availableTicketWithBarcode($ean13Code)
+    public static function unsoldTicketWithBarcode($ean13Code)
     {
         return new Ticket(
             [new Barcode('EAN-13', $ean13Code)]
         );
     }
 
-    public static function boughtTicketWithBarcode($ean13Code, $buyerName)
+    public static function soldTicketWithBarcode($ean13Code, $buyerName)
     {
         return new Ticket(
             [new Barcode('EAN-13', $ean13Code)],

@@ -27,8 +27,8 @@ class MarketplaceTest extends TestCase
      */
     public function it_should_list_all_verified_tickets_for_sale()
     {
-        $boughtTicketWithBarcode = TicketFactory::boughtTicketWithBarcode('883749835', 'Sarah');
-        $availableTicket = TicketFactory::availableTicketWithBarcode('893759834');
+        $boughtTicketWithBarcode = TicketFactory::soldTicketWithBarcode('883749835', 'Sarah');
+        $availableTicket = TicketFactory::unsoldTicketWithBarcode('893759834');
 
         $marketplace = new Marketplace(
             listings: [
@@ -66,8 +66,8 @@ class MarketplaceTest extends TestCase
      */
     public function it_should_not_list_unverified_tickets_for_sale()
     {
-        $boughtTicketWithBarcode = TicketFactory::boughtTicketWithBarcode('883749835', 'Sarah');
-        $availableTicket = TicketFactory::availableTicketWithBarcode('893759834');
+        $boughtTicketWithBarcode = TicketFactory::soldTicketWithBarcode('883749835', 'Sarah');
+        $availableTicket = TicketFactory::unsoldTicketWithBarcode('893759834');
 
         $marketplace = new Marketplace(
             listings: [
@@ -98,7 +98,7 @@ class MarketplaceTest extends TestCase
      */
     public function it_should_be_possible_to_buy_a_verified_ticket()
     {
-        $availableTicket = TicketFactory::availableTicketWithBarcode('893759834');
+        $availableTicket = TicketFactory::unsoldTicketWithBarcode('893759834');
         $newListing = new Listing(
             seller: new Seller('Pascal'),
             tickets: [
@@ -127,7 +127,7 @@ class MarketplaceTest extends TestCase
      */
     public function it_should_not_be_possible_to_buy_an_unverified_ticket()
     {
-        $availableTicket = TicketFactory::availableTicketWithBarcode('893759834');
+        $availableTicket = TicketFactory::unsoldTicketWithBarcode('893759834');
         $marketplace = new Marketplace(
             listings: [
                 new Listing(
@@ -154,7 +154,7 @@ class MarketplaceTest extends TestCase
     public function it_should_not_be_possible_to_buy_the_same_ticket_twice()
     {
         $admin = new Admin('Administrator');
-        $availableTicket = TicketFactory::availableTicketWithBarcode('38974312923');
+        $availableTicket = TicketFactory::unsoldTicketWithBarcode('38974312923');
         $listing1 = (new Listing(
             seller: new Seller('Pascal'),
             tickets: [
@@ -299,7 +299,7 @@ class MarketplaceTest extends TestCase
     public function it_should_be_possible_for_a_buyer_of_a_ticket_to_sell_it_again()
     {
         $admin = new Admin('Administrator');
-        $availableTicket = TicketFactory::availableTicketWithBarcode('38974312923');
+        $availableTicket = TicketFactory::unsoldTicketWithBarcode('38974312923');
         $listing1 = new Listing(
             seller: new Seller('Pascal'),
             tickets: [
@@ -344,7 +344,7 @@ class MarketplaceTest extends TestCase
     public function it_should_not_be_possible_for_someone_other_than_the_last_buyer_to_sell_it_again()
     {
         $admin = new Admin('Administrator');
-        $availableTicket = TicketFactory::availableTicketWithBarcode('38974312923');
+        $availableTicket = TicketFactory::unsoldTicketWithBarcode('38974312923');
         $listing1 = new Listing(
             seller: new Seller('Pascal'),
             tickets: [
@@ -388,7 +388,7 @@ class MarketplaceTest extends TestCase
     public function it_should_be_possible_to_sell_tickets_back_and_forth()
     {
         $admin = new Admin('Administrator');
-        $availableTicket = TicketFactory::availableTicketWithBarcode('38974312923');
+        $availableTicket = TicketFactory::unsoldTicketWithBarcode('38974312923');
         $listing1 = new Listing(
             seller: new Seller('Pascal'),
             tickets: [

@@ -67,8 +67,8 @@ class ListingTest extends TestCase
      */
     public function it_should_list_the_tickets_for_sale()
     {
-        $boughtTicketWithBarcode = TicketFactory::boughtTicketWithBarcode('28774312924', 'Sarah');
-        $availableTicket = TicketFactory::availableTicketWithBarcode('38957953498');
+        $boughtTicketWithBarcode = TicketFactory::soldTicketWithBarcode('28774312924', 'Sarah');
+        $availableTicket = TicketFactory::unsoldTicketWithBarcode('38957953498');
 
         $listing = new Listing(
             tickets: [
@@ -90,8 +90,8 @@ class ListingTest extends TestCase
      */
     public function it_should_list_the_tickets_not_for_sale()
     {
-        $availableTicket = TicketFactory::availableTicketWithBarcode('38957953498');
-        $boughtTicket = TicketFactory::boughtTicketWithBarcode('28957953497', 'Sarah');
+        $availableTicket = TicketFactory::unsoldTicketWithBarcode('38957953498');
+        $boughtTicket = TicketFactory::soldTicketWithBarcode('28957953497', 'Sarah');
         $listing = new Listing(
             tickets: [
                 $availableTicket,
