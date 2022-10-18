@@ -61,6 +61,39 @@ class ListingTest extends TestCase
 
         $this->assertCount(0, $listing->getTickets());
     }
+    /**
+     * @test
+     */
+    public function it_should_not_be_possible_to_create_a_listing_containing_barcodes_from_another_listing()
+    {
+        $this->expectException(ListingContainsDuplicateBarcodeException::class);
+
+        $listing = new Listing(
+            tickets: [
+                new Ticket(
+                    [new Barcode('EAN-13', '38974312923')]
+                ),
+                new Ticket(
+                    [new Barcode('EAN-13', '38974312923')]
+                ),
+            ],
+            price: new Money(4950, new Currency('EUR')),
+            seller: new Seller('Pascal'),
+        );
+
+        $listingWithDuplicateBarcodes = new Listing(
+            tickets: [
+                new Ticket(
+                    [new Barcode('EAN-13', '38974312923')]
+                ),
+                new Ticket(
+                    [new Barcode('EAN-13', '38974312923')]
+                ),
+            ],
+            price: new Money(4950, new Currency('EUR')),
+            seller: new Seller('Pascal'),
+        );
+    }
 
     /**
      * @test
