@@ -6,7 +6,6 @@ use TicketSwap\Assessment\Barcode;
 use TicketSwap\Assessment\Buyer;
 use TicketSwap\Assessment\Ticket;
 
-
 /**
  * Very simple factory class to quickly mock up some instantiated records for testing
  */

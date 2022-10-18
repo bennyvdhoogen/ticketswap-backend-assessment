@@ -8,7 +8,7 @@ final class Barcode implements \Stringable
     {
     }
 
-    public function __toString() : string
+    public function __toString(): string
     {
         return sprintf('%s:%s', $this->type, $this->value);
     }

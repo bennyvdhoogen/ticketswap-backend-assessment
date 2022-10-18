@@ -33,12 +33,12 @@ final class Listing
         }
     }
 
-    public function getId() : ListingId
+    public function getId(): ListingId
     {
         return $this->id;
     }
 
-    public function getSeller() : Seller
+    public function getSeller(): Seller
     {
         return $this->seller;
     }
@@ -46,7 +46,7 @@ final class Listing
     /**
      * @return array<Ticket>
      */
-    public function getTickets(?bool $forSale = null) : array
+    public function getTickets(?bool $forSale = null): array
     {
         if (true === $forSale) {
             $forSaleTickets = [];
@@ -57,7 +57,7 @@ final class Listing
             }
 
             return $forSaleTickets;
-        } else if (false === $forSale) {
+        } elseif (false === $forSale) {
             $notForSaleTickets = [];
             foreach ($this->tickets as $ticket) {
                 if ($ticket->isBought()) {
@@ -71,12 +71,12 @@ final class Listing
         }
     }
 
-    public function getPrice() : Money
+    public function getPrice(): Money
     {
         return $this->price;
     }
 
-    public function isVerified() : bool
+    public function isVerified(): bool
     {
         return $this->isVerified;
     }

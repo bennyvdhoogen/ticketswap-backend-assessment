@@ -19,7 +19,7 @@ final class Marketplace
     /**
      * @return array<Listing>
      */
-    public function getListingsForSale($includeUnverified = false) : array
+    public function getListingsForSale($includeUnverified = false): array
     {
         $listingsForSale = [];
         foreach ($this->listings as $listing) {
@@ -45,7 +45,7 @@ final class Marketplace
         return $listingsForSale;
     }
 
-    private function containsActiveListingWithBarcode(Barcode $listingBarcode) : bool
+    private function containsActiveListingWithBarcode(Barcode $listingBarcode): bool
     {
         foreach ($this->listings as $listing) {
             foreach ($listing->getTickets() as $ticket) {
@@ -62,12 +62,11 @@ final class Marketplace
         return false;
     }
 
-    public function buyTicket(Buyer $buyer, TicketId $ticketId) : Ticket
+    public function buyTicket(Buyer $buyer, TicketId $ticketId): Ticket
     {
-        foreach($this->listings as $listing) {
-            foreach($listing->getTickets() as $ticket) {
+        foreach ($this->listings as $listing) {
+            foreach ($listing->getTickets() as $ticket) {
                 if ($ticket->getId()->equals($ticketId)) {
-
                     if ($ticket->isBought()) {
                         throw new TicketAlreadySoldException(TicketAlreadySoldException::ALREADY_SOLD);
                     }
@@ -76,13 +75,13 @@ final class Marketplace
                         throw new TicketNotVerifiedException(TicketNotVerifiedException::NOT_VERIFIED);
                     }
 
-                   return $ticket->buyTicket($buyer);
+                    return $ticket->buyTicket($buyer);
                 }
             }
         }
     }
 
-    public function setListingForSale(Listing $listing) : void
+    public function setListingForSale(Listing $listing): void
     {
         foreach ($listing->getTickets() as $ticket) {
             foreach ($ticket->getBarcodes() as $barcode) {
@@ -102,7 +101,7 @@ final class Marketplace
         $this->listings[] = $listing;
     }
 
-    public function getTicketsByBarcode(Barcode $barcode) : array
+    public function getTicketsByBarcode(Barcode $barcode): array
     {
         $tickets = [];
 
@@ -117,9 +116,12 @@ final class Marketplace
         }
 
         // Sort the tickets by the bought_at date, descending
-        usort($tickets, function($first,$second) {
-            return $first->bought_at < $second->bought_at;
-        });
+        usort(
+            $tickets,
+            function ($first, $second) {
+                return $first->bought_at < $second->bought_at;
+            }
+        );
 
         return $tickets;
     }

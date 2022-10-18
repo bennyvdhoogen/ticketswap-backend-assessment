@@ -12,12 +12,12 @@ final class TicketId implements \Stringable
     {
     }
 
-    public function __toString() : string
+    public function __toString(): string
     {
         return $this->id;
     }
 
-    public function equals(TicketId $otherId) : bool
+    public function equals(TicketId $otherId): bool
     {
         return $this->id === $otherId->id;
     }
