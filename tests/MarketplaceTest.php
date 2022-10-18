@@ -27,7 +27,7 @@ class MarketplaceTest extends TestCase
      */
     public function it_should_list_all_verified_tickets_for_sale()
     {
-        $boughtTicketWithBarcode = TicketFactory::soldTicketWithBarcode('883749835', 'Sarah');
+        $soldTicketWithBarcode = TicketFactory::soldTicketWithBarcode('883749835', 'Sarah');
         $availableTicket = TicketFactory::unsoldTicketWithBarcode('893759834');
 
         $marketplace = new Marketplace(
@@ -35,7 +35,7 @@ class MarketplaceTest extends TestCase
                 new Listing(
                     seller: new Seller('Pascal'),
                     tickets: [
-                        $boughtTicketWithBarcode
+                        $soldTicketWithBarcode
                     ],
                     price: new Money(4950, new Currency('EUR')),
                 ),
@@ -66,7 +66,7 @@ class MarketplaceTest extends TestCase
      */
     public function it_should_not_list_unverified_tickets_for_sale()
     {
-        $boughtTicketWithBarcode = TicketFactory::soldTicketWithBarcode('883749835', 'Sarah');
+        $soldTicketWithBarcode = TicketFactory::soldTicketWithBarcode('883749835', 'Sarah');
         $availableTicket = TicketFactory::unsoldTicketWithBarcode('893759834');
 
         $marketplace = new Marketplace(
@@ -74,7 +74,7 @@ class MarketplaceTest extends TestCase
                 new Listing(
                     seller: new Seller('Pascal'),
                     tickets: [
-                        $boughtTicketWithBarcode
+                        $soldTicketWithBarcode
                     ],
                     price: new Money(4950, new Currency('EUR')),
                 ),
@@ -359,7 +359,7 @@ class MarketplaceTest extends TestCase
         );
         $listing1->verify($admin);
 
-        $boughtTicketWithBarcode = $marketplace->buyTicket(
+        $soldTicketWithBarcode = $marketplace->buyTicket(
             buyer: new Buyer('Sarah'),
             ticketId: $availableTicket->getId()
         );
