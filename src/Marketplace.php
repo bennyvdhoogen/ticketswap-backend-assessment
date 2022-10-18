@@ -45,7 +45,7 @@ final class Marketplace
         return $listingsForSale;
     }
 
-    public function containsActiveListingWithBarcode(Barcode $listingBarcode) : bool
+    private function containsActiveListingWithBarcode(Barcode $listingBarcode) : bool
     {
         foreach ($this->listings as $listing) {
             foreach ($listing->getTickets() as $ticket) {
@@ -65,7 +65,6 @@ final class Marketplace
     public function buyTicket(Buyer $buyer, TicketId $ticketId) : Ticket
     {
         foreach($this->listings as $listing) {
-            ray($listing);
             foreach($listing->getTickets() as $ticket) {
                 if ($ticket->getId()->equals($ticketId)) {
 
