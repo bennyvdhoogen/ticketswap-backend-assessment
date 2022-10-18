@@ -5,6 +5,7 @@ namespace TicketSwap\Assessment;
 use TicketSwap\Assessment\Exceptions\NotCurrentOwnerException;
 use TicketSwap\Assessment\Exceptions\TicketAlreadyForSaleException;
 use TicketSwap\Assessment\Exceptions\TicketAlreadySoldException;
+use TicketSwap\Assessment\Exceptions\TicketNotVerifiedException;
 
 final class Marketplace
 {
@@ -18,11 +19,17 @@ final class Marketplace
     /**
      * @return array<Listing>
      */
-    public function getListingsForSale() : array
+    public function getListingsForSale($includeUnverified = false) : array
     {
         $listingsForSale = [];
         foreach ($this->listings as $listing) {
             $soldTicketsInListing = 0;
+
+            if ($includeUnverified === false) {
+                if ($listing->isVerified() === false) {
+                    continue;
+                }
+            }
 
             foreach ($listing->getTickets() as $ticket) {
                 if ($ticket->isBought()) {
@@ -58,11 +65,16 @@ final class Marketplace
     public function buyTicket(Buyer $buyer, TicketId $ticketId) : Ticket
     {
         foreach($this->listings as $listing) {
+            ray($listing);
             foreach($listing->getTickets() as $ticket) {
                 if ($ticket->getId()->equals($ticketId)) {
 
                     if ($ticket->isBought()) {
                         throw new TicketAlreadySoldException(TicketAlreadySoldException::ALREADY_SOLD);
+                    }
+
+                    if ($listing->isVerified() === false) {
+                        throw new TicketNotVerifiedException(TicketNotVerifiedException::NOT_VERIFIED);
                     }
 
                    return $ticket->buyTicket($buyer);
@@ -111,5 +123,10 @@ final class Marketplace
         });
 
         return $tickets;
+    }
+
+    public function getUnverifiedListings()
+    {
+        return $this->getListingsForSale(true);
     }
 }
