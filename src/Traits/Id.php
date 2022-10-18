@@ -4,7 +4,7 @@ namespace TicketSwap\Assessment\Traits;
 
 use Ramsey\Uuid\Uuid;
 
-trait id
+trait Id
 {
     public static function generateRandom(): self
     {

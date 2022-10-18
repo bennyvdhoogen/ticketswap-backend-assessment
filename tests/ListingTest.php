@@ -100,8 +100,6 @@ class ListingTest extends TestCase
 
         $ticketsNotForSale = $listing->getTickets(false);
 
-        ray($ticketsNotForSale);
-
         $this->assertCount(1, $ticketsNotForSale);
         $this->assertSame((string) $boughtTicket->getId(), (string) $ticketsNotForSale[0]->getId());
     }
